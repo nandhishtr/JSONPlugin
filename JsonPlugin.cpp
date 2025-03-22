@@ -88,7 +88,7 @@ JSONPlugin::widget()
 QString
 JSONPlugin::label() const
 {
-    return "JSON Plugin Label";
+    return "JSON Plugin";
 }
 
 /** slot, which is called if a tree item is selected */
@@ -97,4 +97,35 @@ JSONPlugin::treeItemIsSelected( TreeItem* item )
 {
     QString txt = item->getName() + " " + QString::number( item->getValue() );
     qlabel_->setText( txt );
+    auto systemTreeItem = service->getSystemTreeItem(0);
+    // QString txt2 = systemTreeItem->getLabel(); //both give same thing
+    // QString txt3 = systemTreeItem->getName();
+    // auto txt4 = systemTreeItem->getAbsoluteValue();
+    // QString valueAsString = QString::number(txt4);
+    // auto test = systemTreeItem->getValueObject();
+    // auto qv = systemTreeItem->convertToQVariant();
+    // QJsonValue::fromVariant(qv);
+    // auto yes = systemTreeItem->isTopLevelItem();
+    // if (yes){
+    // }
+
+    QString outputString = "";
+
+    auto yes = systemTreeItem->getChildren();
+    auto depth = systemTreeItem->getDepth();
+    outputString = QString::number(depth) + " " + QString::number(systemTreeItem->getValue()) + systemTreeItem->getName();
+    for (auto item : yes)
+    {
+        outputString += "\n";
+        outputString +=  QString::number(item->getValue()) + " " + item->getName() + " ";
+        outputString += "is leaf: " + QString::number(item->isLeaf()) + "\n\t";
+        auto finalchildren = item->getChildren();
+        for (auto child: finalchildren) {
+            outputString += QString::number(child->getValue()) + " " + child->getName() + " ";
+            outputString += "is leaf: " + QString::number(child->isLeaf()) + "\n\t";
+        }
+    }
+    qlabel_->setText(outputString);
+
+
 }
