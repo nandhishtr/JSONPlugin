@@ -121,10 +121,13 @@ JSONPlugin::treeItemIsSelected( TreeItem* item )
     qlabel_->setText(outputString);
 }
 
+/** returs json object created form tree data*/
 QJsonObject
 JSONPlugin::getJSONData(cubegui::TreeItem *item)
 {
     QJsonObject jsonObject;
+
+    //populate json object with tree object name and value
     jsonObject["value"] = item->getValue();
     jsonObject["name"] = item->getName();
     if (!item->isLeaf())
