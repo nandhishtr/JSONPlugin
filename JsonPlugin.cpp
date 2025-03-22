@@ -14,6 +14,7 @@
 #include <QtPlugin>
 #include "JsonPlugin.h"
 #include "PluginServices.h"
+#include <QScrollArea>
 
 /**
  * If the plugin doesn't load, start cube with -verbose to get detailed information.
@@ -36,17 +37,35 @@ JSONPlugin::cubeOpened( PluginServices* service )
 {
     this->service = service;
 
+    //container widget
+    QWidget* container = new QWidget();
+
+    //layout for the inner container
+    QVBoxLayout* layout = new QVBoxLayout(container);
+
+    qlabel_ = new QLabel("JSON Plugin to display system tree data in JSON format");
+
+    layout->addWidget(qlabel_);
+
+    //make the container widget scrollable
+    QScrollArea* scrollArea = new QScrollArea();
+    scrollArea->setWidget(container);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    //main widget
     widget_ = new QWidget();
-    qlabel_ = new QLabel( "JSON Plugin to display system tree data in JSON format" );
-    QVBoxLayout* layout = new QVBoxLayout();
-    widget_->setLayout( layout );
-    layout->addWidget( qlabel_ );
 
-    service->addTab( SYSTEM, this );
+    //layout for main widget
+    QVBoxLayout* mainLayout = new QVBoxLayout(widget_);
+    mainLayout->addWidget(scrollArea);
 
-    connect( service, SIGNAL( treeItemIsSelected( cubepluginapi::TreeItem* ) ),
-             this, SLOT( treeItemIsSelected( cubepluginapi::TreeItem* ) ) );
-    return true; // initialisation is ok => plugin should be shown
+    service->addTab(SYSTEM, this);
+
+    connect(service, SIGNAL(treeItemIsSelected(cubepluginapi::TreeItem*)),
+            this, SLOT(treeItemIsSelected(cubepluginapi::TreeItem*)));
+
+    return true; // initialization is OK => plugin should be shown
 }
 
 void
