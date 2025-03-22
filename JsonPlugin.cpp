@@ -37,7 +37,7 @@ JSONPlugin::cubeOpened( PluginServices* service )
     this->service = service;
 
     widget_ = new QWidget();
-    qlabel_ = new QLabel( "Testing JSON Plugin" );
+    qlabel_ = new QLabel( "JSON Plugin to display system tree data in JSON format" );
     QVBoxLayout* layout = new QVBoxLayout();
     widget_->setLayout( layout );
     layout->addWidget( qlabel_ );
@@ -74,7 +74,7 @@ JSONPlugin::name() const
 QString
 JSONPlugin::getHelpText() const
 {
-    return "Just a simple JSON Visualizer.";
+    return "JSON Plugin to display system tree data in JSON format. It visualizes the tree with names and values";
 }
 
 /** widget that will be placed into the tab */
@@ -96,23 +96,27 @@ void
 JSONPlugin::treeItemIsSelected( TreeItem* item )
 {
     auto systemTreeItem = service->getSystemTreeItem(0);
-
-    QString outputString = "";
-    outputString = getData(systemTreeItem, outputString);
+    QJsonObject systemTreeJson = getJSONData(systemTreeItem);
+    QJsonDocument document(systemTreeJson);
+    QString outputString = document.toJson(QJsonDocument::Indented);
     qlabel_->setText(outputString);
 }
 
-QString JSONPlugin::getData(cubegui::TreeItem *item, QString &outputString)
+QJsonObject
+JSONPlugin::getJSONData(cubegui::TreeItem *item)
 {
-    outputString += QString::number(item->getValue()) + " " + item->getName() + "\n\t";
-
+    QJsonObject jsonObject;
+    jsonObject["value"] = item->getValue();
+    jsonObject["name"] = item->getName();
     if (!item->isLeaf())
     {
+        QJsonArray childJsonObjects;
         for (auto child : item->getChildren())
         {
-            getData(child, outputString);
+            childJsonObjects.append(getJSONData(child));
         }
+        jsonObject["children"] = childJsonObjects;
     }
-
-    return outputString;
+    return jsonObject;
 }
+
