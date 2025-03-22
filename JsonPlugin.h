@@ -57,6 +57,7 @@ private:
     QWidget*                       widget_;
     QLabel*                        qlabel_;
     cubepluginapi::PluginServices* service;
+    QString getData(cubepluginapi::TreeItem* item, QString& outputString);
 
     // TabInterface interface
 };
