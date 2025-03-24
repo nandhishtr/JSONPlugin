@@ -1,15 +1,3 @@
-/****************************************************************************
-**  CUBE        http://www.scalasca.org/                                   **
-*****************************************************************************
-**  Copyright (c) 1998-2022                                                **
-**  Forschungszentrum Juelich GmbH, Juelich Supercomputing Centre          **
-**                                                                         **
-**  This software may be modified and distributed under the terms of       **
-**  a BSD-style license.  See the COPYING file in the package base         **
-**  directory for details.                                                 **
-****************************************************************************/
-
-
 #include <QVBoxLayout>
 #include <QtPlugin>
 #include "JsonPlugin.h"
@@ -114,7 +102,10 @@ JSONPlugin::label() const
 void
 JSONPlugin::treeItemIsSelected( TreeItem* item )
 {
-    auto systemTreeItem = service->getSystemTreeItem(0);
+    Q_UNUSED(item);
+    //Using System Tree with index 0, since only one tree is visible in the GUI
+    const uint32_t ROOT_SYSTEM_TREE_ID = 0;
+    auto systemTreeItem = service->getSystemTreeItem(ROOT_SYSTEM_TREE_ID);
     QJsonObject systemTreeJson = getJSONData(systemTreeItem);
     QJsonDocument document(systemTreeJson);
     QString outputString = document.toJson(QJsonDocument::Indented);

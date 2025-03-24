@@ -1,15 +1,3 @@
-/****************************************************************************
-**  CUBE        http://www.scalasca.org/                                   **
-*****************************************************************************
-**  Copyright (c) 1998-2022                                                **
-**  Forschungszentrum Juelich GmbH, Juelich Supercomputing Centre          **
-**                                                                         **
-**  This software may be modified and distributed under the terms of       **
-**  a BSD-style license.  See the COPYING file in the package base         **
-**  directory for details.                                                 **
-****************************************************************************/
-
-
 #ifndef TESTPLUGIN1_H
 #define TESTPLUGIN1_H
 #include <QWidget>
